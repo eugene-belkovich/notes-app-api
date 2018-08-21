@@ -4,6 +4,7 @@ plugins:
   - serverless-webpack
   - serverless-offline
 
+
 resources:
   - ${file(resources/dynamodb-table.yml)}
   - ${file(resources/s3-bucket.yml)}
@@ -20,6 +21,7 @@ custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
+  environment: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
 
 provider:
   name: aws
@@ -29,6 +31,7 @@ provider:
   environment:
       tableName:
         Ref: NotesTable
+      stripeSecretKey: ${self:custom.environment.stripeSecretKey}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -81,5 +84,13 @@ functions:
         - http:
             path: notes/{id}
             method: delete
+            cors: true
+            authorizer: aws_iam
+  billing:
+      handler: billing.main
+      events:
+        - http:
+            path: billing
+            method: post
             cors: true
             authorizer: aws_iam
