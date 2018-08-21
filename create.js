@@ -5,15 +5,15 @@ import { success, failure } from './libs/response-lib'
 export async function main(event, context, callback) {
   const data = event.body
   const params = {
-    TableName: 'notes',
+    TableName: process.env.tableName,
     Item: {
       userId: event.requestContext.identity.cognitoIdentityId,
       noteId: uuid.v1(),
       content: data.content,
       attachment: data.attachment,
-      createdAt: Date.now(),
-    },
-  }
+      createdAt: new Date().getTime()
+    }
+  };
 
   try {
     await dynamoDbLib.call("put", params);
