@@ -1,7 +1,7 @@
 {
   "body": {
-    "content": "hello world",
-    "attachment": "hello.jpg"
+    "content": "ccc",
+    "attachment": "ccc"
   },
   "requestContext": {
     "identity": {
